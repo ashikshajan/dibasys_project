@@ -1,0 +1,1 @@
+enum DeviceCategory { mobile, tablet, desktop }
