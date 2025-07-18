@@ -8,10 +8,10 @@ class AppProvider extends ChangeNotifier {
   static AppProvider state(BuildContext context, [bool listen = false]) =>
       Provider.of<AppProvider>(context, listen: listen);
 
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.dark;
   ThemeMode get themeMode => _themeMode;
 
-  bool get isDark => _themeMode == ThemeMode.dark;
+  bool get isDark => _themeMode == ThemeMode.light; //
 
   void init() async {
     final prefs = await SharedPreferences.getInstance();
@@ -20,14 +20,10 @@ class AppProvider extends ChangeNotifier {
 
     ThemeMode? theme = stringTheme == null
         ? ThemeMode.dark
-        // change here
         : themeMap[stringTheme];
 
     if (theme == null) {
-      await prefs.setString(
-        'theme',
-        ThemeMode.light.toString().split(".").last,
-      );
+      await prefs.setString('theme', ThemeMode.dark.toString().split(".").last);
 
       _themeMode = ThemeMode.light;
     }

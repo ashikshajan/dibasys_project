@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AppTheme {
-  AppTheme._();
+class AppThemes {
+  AppThemes._();
 
   static const primary = Color(0xffD2815E);
   static const white = Colors.white;

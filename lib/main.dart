@@ -1,5 +1,6 @@
 import 'package:dibasys_project/@core/configs/core_theme.dart';
 import 'package:dibasys_project/@core/controllers/appController.dart';
+import 'package:dibasys_project/@core/controllers/dashboardController.dart';
 import 'package:dibasys_project/@core/controllers/loginController.dart';
 import 'package:dibasys_project/@core/router/approuter.dart';
 import 'package:flutter/foundation.dart';
@@ -9,25 +10,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 final globalKey = GlobalKey<ScaffoldMessengerState>();
+MaterialColor customSwatch = MaterialColor(0xffD2815E, <int, Color>{
+  50: Color(0xfffceeea),
+  100: Color(0xfff7d6cc),
+  200: Color(0xfff1bbaa),
+  300: Color(0xffec9f87),
+  400: Color(0xffe78a6d),
+  500: Color(0xffD2815E), // base
+  600: Color(0xffb96d4d),
+  700: Color(0xff9e5b3f),
+  800: Color(0xff844931),
+  900: Color(0xff693622),
+});
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final MaterialColor customColor = MaterialColor(
-    const Color.fromRGBO(17, 25, 64, 1).value,
-    const <int, Color>{
-      50: Color.fromRGBO(17, 25, 64, 0.1),
-      100: Color.fromRGBO(17, 25, 64, 0.2),
-      200: Color.fromRGBO(17, 25, 64, 0.3),
-      300: Color.fromRGBO(17, 25, 64, 0.4),
-      400: Color.fromRGBO(17, 25, 64, 0.5),
-      500: Color.fromRGBO(17, 25, 64, 0.6),
-      600: Color.fromRGBO(17, 25, 64, 0.7),
-      700: Color.fromRGBO(17, 25, 64, 0.8),
-      800: Color.fromRGBO(17, 25, 64, 0.9),
-      900: Color.fromRGBO(17, 25, 64, 1),
-    },
-  );
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +36,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (context) => LoginController()),
           ChangeNotifierProvider(create: (context) => AppProvider()),
+          ChangeNotifierProvider(create: (context) => DashBoardController()),
         ],
         child: Consumer<AppProvider>(
           builder: (context, value, _) {

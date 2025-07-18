@@ -1,19 +1,20 @@
+import 'package:dibasys_project/main.dart';
 import 'package:flutter/material.dart';
 
 const fontFamily = 'Poppins';
 
 final themeLight = ThemeData(
-  primaryColorLight: const Color(0xffC0392B),
+  primaryColorLight: Color(0xffD2815E),
   brightness: Brightness.light,
-  primaryColor: const Color(0xffC0392B),
-  highlightColor: Colors.black,
+  primaryColor: Color(0xffD2815E),
+  highlightColor: Colors.white,
   canvasColor: Colors.white,
   fontFamily: fontFamily,
   splashColor: Colors.transparent,
   scaffoldBackgroundColor: Colors.white,
-  colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+  colorScheme: ColorScheme.fromSwatch(primarySwatch: customSwatch)
       .copyWith(
-        secondary: Colors.black,
+        secondary: Colors.white,
         brightness: Brightness.light,
         surface: Colors.white,
       )
@@ -22,15 +23,15 @@ final themeLight = ThemeData(
 
 final themeDark = ThemeData(
   brightness: Brightness.dark,
-  primaryColorDark: const Color(0xffC0392B),
-  primaryColor: const Color(0xffC0392B),
-  highlightColor: const Color(0xffC0392B),
+  primaryColorDark: Color(0xffD2815E),
+  primaryColor: Color(0xffD2815E),
+  highlightColor: Color(0xffD2815E),
   canvasColor: Colors.white,
   fontFamily: fontFamily,
   splashColor: Colors.transparent,
   scaffoldBackgroundColor: Colors.black,
   colorScheme: ColorScheme.fromSwatch(
-    primarySwatch: Colors.red,
+    primarySwatch: customSwatch,
     brightness: Brightness.dark,
   ).copyWith(surface: Colors.grey[800]),
 );

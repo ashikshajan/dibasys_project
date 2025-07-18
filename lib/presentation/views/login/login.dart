@@ -1,10 +1,11 @@
+import 'package:dibasys_project/@core/router/routenames.dart';
 import 'package:dibasys_project/@core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -18,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: SizedBox.shrink(),
-        backgroundColor: AppTheme.black,
+        backgroundColor: AppThemes.black,
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -29,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 'Login',
                 style: GoogleFonts.dmSans(
-                  color: AppTheme.primary,
+                  color: AppThemes.primary,
                   fontSize: 30,
                   fontWeight: FontWeight.w500,
                 ),
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   children: [
                     Checkbox(
-                      activeColor: AppTheme.primary,
+                      activeColor: AppThemes.primary,
                       value: rememberMe,
                       onChanged: (value) =>
                           setState(() => rememberMe = value ?? false),
@@ -141,11 +142,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text(
                     "Forgot Passcode?",
                     style: GoogleFonts.dmSans(
-                      color: AppTheme.primary,
+                      color: AppThemes.primary,
                       fontWeight: FontWeight.w300,
                       fontSize: 15,
                       decoration: TextDecoration.underline,
-                      decorationColor: AppTheme.primary,
+                      decorationColor: AppThemes.primary,
                     ),
                   ),
                 ),
@@ -160,10 +161,10 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
-                  context.go("/home");
+                  context.go(RouteNames.dashboard);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primary,
+                  backgroundColor: AppThemes.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -171,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   "Login",
                   style: GoogleFonts.dmSans(
-                    color: AppTheme.white,
+                    color: AppThemes.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
                   ),
@@ -195,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextSpan(
                       text: "Register",
                       style: GoogleFonts.dmSans(
-                        color: AppTheme.primary,
+                        color: AppThemes.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),
