@@ -1,7 +1,10 @@
 # dibasys_project
 
 
-📱 Dibasys Flutter App
+📱 Dibasys Flutter App .
+
+
+
 A simple Flutter application demonstrating Login, Registration, and Manual Check-In with Auto Timer, using Hive for local storage and Provider for state management.
 
 🚀 Features
