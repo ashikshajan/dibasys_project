@@ -1,7 +1,7 @@
 # dibasys_project
 
 
-📱 Dibasys Flutter App .
+📱 Dibasys Flutter App.
 
 
 
