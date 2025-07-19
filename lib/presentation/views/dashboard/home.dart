@@ -1,7 +1,13 @@
+import 'package:dibasys_project/@core/controllers/checkin_controller.dart';
+import 'package:dibasys_project/@core/controllers/dashboardController.dart';
 import 'package:dibasys_project/@core/router/routenames.dart';
+import 'package:dibasys_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -11,13 +17,18 @@ class Home extends StatelessWidget {
     final now = DateTime.now();
     final formattedDate = DateFormat('EEEE dd MMMM, yyyy').format(now);
 
+    final userBox = Hive.box('userBox');
+    final phone = userBox.get('loggedInUserPhone');
+    final user = phone != null ? userBox.get(phone) : null;
+    final name = user != null ? user['name'] ?? 'User' : 'User';
+
     return Scaffold(
       body: Column(
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-            decoration: const BoxDecoration(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFFF6E9E4), Color(0xFFE7D8D1)],
                 begin: Alignment.topCenter,
@@ -31,7 +42,7 @@ class Home extends StatelessWidget {
             child: SafeArea(
               bottom: false,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Top icons row
                   Row(
@@ -39,11 +50,10 @@ class Home extends StatelessWidget {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Hey Jose',
-                            style: TextStyle(
+                          Text(
+                            'Hey ${(name).toString().capitalize()}',
+                            style: GoogleFonts.dmSans(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
@@ -51,7 +61,7 @@ class Home extends StatelessWidget {
                           ),
                           Text(
                             formattedDate,
-                            style: const TextStyle(
+                            style: GoogleFonts.dmSans(
                               fontSize: 16,
                               color: Colors.black54,
                             ),
@@ -65,58 +75,67 @@ class Home extends StatelessWidget {
                       ),
                     ],
                   ),
-
-                  // Greeting and date
-                  const SizedBox(height: 30),
-
-                  // Working Hours Card
+                  SizedBox(height: 30),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
                       color: Colors.black87,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
-                      children: const [
+                      children: [
                         Text(
                           'Working Hours',
-                          style: TextStyle(color: Colors.white70),
+                          style: GoogleFonts.dmSans(color: Colors.white70),
                         ),
                         SizedBox(height: 8),
-                        Text(
-                          '00:00:00 Hrs',
-                          style: TextStyle(
-                            fontSize: 26,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Consumer<CheckInController>(
+                          builder: (context, provider, _) {
+                            return Text(
+                              '${provider.formatDuration(provider.elapsed)} Hrs',
+
+                              style: GoogleFonts.dmSans(
+                                fontSize: 26,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // Manual Check-in Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xffD87C5A),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                  SizedBox(height: 20),
+                  Consumer<CheckInController>(
+                    builder: (context, provider, _) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xffD87C5A),
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () {
+                            provider.elapsed == Duration(seconds: 0)
+                                ? context.go(RouteNames.checkInScreen)
+                                : provider.stopTimer();
+                          },
+                          child: Text(
+                            provider.elapsed == Duration(seconds: 0)
+                                ? 'Manual Check-in'
+                                : "Check-out",
+                            style: GoogleFonts.dmSans(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        context.go(RouteNames.checkInScreen);
-                      },
-                      child: const Text(
-                        'Manual Check-in',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),

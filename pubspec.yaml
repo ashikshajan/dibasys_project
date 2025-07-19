@@ -14,9 +14,11 @@ dependencies:
   flutter_svg: ^2.2.0
   shared_preferences: ^2.5.3
   intl: ^0.18.1
+  hive_flutter: ^1.1.0
 
   flutter:
     sdk: flutter
+ 
     
 
 dev_dependencies:

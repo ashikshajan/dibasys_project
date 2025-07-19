@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dibasys_project/presentation/views/dashboard/activities.dart';
 import 'package:dibasys_project/presentation/views/dashboard/home.dart';
 import 'package:dibasys_project/presentation/views/dashboard/jobs.dart';
@@ -5,11 +7,11 @@ import 'package:dibasys_project/presentation/views/dashboard/notifications.dart'
 import 'package:flutter/material.dart';
 
 class DashBoardController with ChangeNotifier {
-  int _bottomNavIndex = 0;
-  int get bottomNavIndex => _bottomNavIndex;
+  BottomNavClass _bottomNavIndex = BottomNavClass(index: 0, name: "Home");
+  BottomNavClass get bottomNavIndex => _bottomNavIndex;
 
-  set setBottomNavIndex(int index) {
-    _bottomNavIndex = index;
+  set setBottomNavIndex(BottomNavClass values) {
+    _bottomNavIndex = BottomNavClass(index: values.index, name: values.name);
     notifyListeners();
   }
 
@@ -33,4 +35,11 @@ class DashBoardController with ChangeNotifier {
         return Home();
     }
   }
+}
+
+class BottomNavClass {
+  final String name;
+  final int index;
+
+  BottomNavClass({required this.name, required this.index});
 }

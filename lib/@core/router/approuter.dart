@@ -3,6 +3,7 @@ import 'package:dibasys_project/presentation/views/dashboard/dashboard_main.dart
 
 import 'package:dibasys_project/presentation/views/login/login.dart';
 import 'package:dibasys_project/presentation/views/manualcheckin/manual_checkin.dart';
+import 'package:dibasys_project/presentation/views/register/registerscreen.dart';
 import 'package:dibasys_project/presentation/views/splash/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,16 +11,6 @@ import 'package:go_router/go_router.dart';
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/',
-    // redirect: (BuildContext context, GoRouterState state) async {
-    // SharedPreferences sharedPreferences =
-    //     await SharedPreferences.getInstance();
-    // var allowedRoutes = ['/authenticate', '/verify-otp', '/verify'];
-    // if (sharedPreferences.getBool(SharedPreferenceKeys.isLoggedIn) == true ||
-    //     allowedRoutes.contains(state.matchedLocation)) {
-    //   return null;
-    // }
-    // return '/authenticate';
-    // },
     routes: [
       GoRoute(
         path: RouteNames.splash,
@@ -65,7 +56,7 @@ class AppRouter {
       GoRoute(
         path: RouteNames.dashboard,
         name: 'dashboard',
-        // builder: (context, state) => Home(key: state.pageKey),
+
         pageBuilder: (context, state) {
           return RouterTransitionFactory.getTransitionPage(
             context: context,
@@ -78,12 +69,26 @@ class AppRouter {
       GoRoute(
         path: RouteNames.checkInScreen,
         name: 'checkinccreen',
-        // builder: (context, state) => Home(key: state.pageKey),
+
         pageBuilder: (context, state) {
           return RouterTransitionFactory.getTransitionPage(
             context: context,
             state: state,
             child: CheckInScreen(),
+            type: 'scale',
+          );
+        },
+      ),
+
+      GoRoute(
+        path: RouteNames.registration,
+        name: 'registration',
+
+        pageBuilder: (context, state) {
+          return RouterTransitionFactory.getTransitionPage(
+            context: context,
+            state: state,
+            child: RegisterScreen(),
             type: 'scale',
           );
         },

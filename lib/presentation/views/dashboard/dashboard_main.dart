@@ -16,6 +16,12 @@ class Dashboard extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
+            title: provider.bottomNavIndex.index == 0
+                ? null
+                : Text(
+                    provider.bottomNavIndex.name,
+                    style: GoogleFonts.dmSans(color: Colors.black),
+                  ),
             backgroundColor: Color.fromARGB(255, 251, 233, 224),
             leading: Builder(
               builder: (context) {
@@ -32,7 +38,7 @@ class Dashboard extends StatelessWidget {
             ),
 
             actions: [
-              provider.bottomNavIndex == 0
+              provider.bottomNavIndex.index == 0
                   ? Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                       child: SvgPicture.asset(
@@ -45,7 +51,7 @@ class Dashboard extends StatelessWidget {
           ),
           extendBodyBehindAppBar: false,
           drawer: AppDrawer(),
-          body: provider.viewBody(provider.bottomNavIndex),
+          body: provider.viewBody(provider.bottomNavIndex.index),
 
           bottomNavigationBar: ClipRRect(
             child: Container(
@@ -61,11 +67,14 @@ class Dashboard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(provider.tabs.length, (index) {
-                  final isSelected = index == provider.bottomNavIndex;
+                  final isSelected = index == provider.bottomNavIndex.index;
 
                   return InkWell(
                     onTap: () {
-                      provider.setBottomNavIndex = index;
+                      provider.setBottomNavIndex = BottomNavClass(
+                        index: index,
+                        name: provider.tabs[index]['label'],
+                      );
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

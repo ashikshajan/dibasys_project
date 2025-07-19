@@ -1,33 +1,25 @@
+import 'package:dibasys_project/@core/controllers/checkin_controller.dart';
 import 'package:dibasys_project/@core/router/routenames.dart';
 import 'package:dibasys_project/@core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class CheckInScreen extends StatefulWidget {
+class CheckInScreen extends StatelessWidget {
   const CheckInScreen({super.key});
 
   @override
-  State<CheckInScreen> createState() => _CheckInScreenState();
-}
-
-class _CheckInScreenState extends State<CheckInScreen> {
-  String? selectedProject;
-  String? selectedGate;
-  String? workType;
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<CheckInController>(context);
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: InkWell(
-          onTap: () {
-            context.go(RouteNames.dashboard);
-          },
-
+          onTap: () => context.go(RouteNames.dashboard),
           child: Icon(Icons.arrow_back, color: Colors.white),
         ),
         elevation: 0,
@@ -73,13 +65,11 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     child: Column(
                       children: [
                         SvgPicture.asset("assets/images/icons/worker.svg"),
-                        // Text('👷‍♂️', style: GoogleFonts.dmSans(fontSize: 40)),
                         SizedBox(height: 8),
                         Text(
                           'Worker',
                           style: GoogleFonts.dmSans(
                             color: Colors.white,
-
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
                           ),
@@ -89,24 +79,11 @@ class _CheckInScreenState extends State<CheckInScreen> {
                   ),
                   SizedBox(height: 20),
 
-                  // Projects Dropdown
+                  // Project Dropdown
                   DropdownButtonFormField<String>(
+                    value: controller.selectedProject,
                     dropdownColor: Colors.grey[900],
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black,
-                      hintText: 'Projects',
-                      hintStyle: GoogleFonts.dmSans(
-                        color: Colors.white70,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white24),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
+                    decoration: _inputDecoration('Projects'),
                     style: GoogleFonts.dmSans(color: Colors.white),
                     items: ['Project A', 'Project B', 'Project C']
                         .map(
@@ -123,34 +100,16 @@ class _CheckInScreenState extends State<CheckInScreen> {
                           ),
                         )
                         .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedProject = value;
-                      });
-                    },
+                    onChanged: controller.setProject,
                   ),
 
                   SizedBox(height: 16),
 
-                  // Gates Dropdown
+                  // Gate Dropdown
                   DropdownButtonFormField<String>(
+                    value: controller.selectedGate,
                     dropdownColor: Colors.grey[900],
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black,
-                      hintText: 'Gates',
-                      hintStyle: GoogleFonts.dmSans(
-                        color: Colors.white70,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white24),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
+                    decoration: _inputDecoration('Gates'),
                     style: GoogleFonts.dmSans(color: Colors.white),
                     items: ['Gate 1', 'Gate 2', 'Gate 3']
                         .map(
@@ -167,11 +126,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                           ),
                         )
                         .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGate = value;
-                      });
-                    },
+                    onChanged: controller.setGate,
                   ),
 
                   SizedBox(height: 20),
@@ -193,12 +148,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     children: [
                       Radio<String>(
                         value: 'Budget',
-                        groupValue: workType,
-                        onChanged: (value) {
-                          setState(() {
-                            workType = value;
-                          });
-                        },
+                        groupValue: controller.workType,
+                        onChanged: controller.setWorkType,
                         activeColor: AppThemes.primary,
                       ),
                       Text(
@@ -212,12 +163,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
                       SizedBox(width: 20),
                       Radio<String>(
                         value: 'Issue',
-                        groupValue: workType,
-                        onChanged: (value) {
-                          setState(() {
-                            workType = value;
-                          });
-                        },
+                        groupValue: controller.workType,
+                        onChanged: controller.setWorkType,
                         activeColor: AppThemes.primary,
                       ),
                       Text(
@@ -232,7 +179,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
                   ),
 
                   SizedBox(height: 30),
-                  // Check in button
+
+                  // Check-in Button
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -243,7 +191,12 @@ class _CheckInScreenState extends State<CheckInScreen> {
                         ),
                         padding: EdgeInsets.symmetric(vertical: 14),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (controller.validateCheckIn(context)) {
+                          controller.startTimer();
+                          context.go(RouteNames.dashboard);
+                        }
+                      },
                       child: Text(
                         'Check-in',
                         style: GoogleFonts.dmSans(color: Colors.white),
@@ -256,6 +209,24 @@ class _CheckInScreenState extends State<CheckInScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      filled: true,
+      fillColor: Colors.black,
+      hintText: hint,
+      hintStyle: GoogleFonts.dmSans(
+        color: Colors.white70,
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white24),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      border: OutlineInputBorder(),
     );
   }
 }

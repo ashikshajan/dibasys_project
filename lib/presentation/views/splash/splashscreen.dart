@@ -1,3 +1,4 @@
+import 'package:dibasys_project/@core/configs/shared_pref.dart';
 import 'package:dibasys_project/@core/router/routenames.dart';
 import 'package:dibasys_project/@core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,22 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  @override
   void initState() {
     super.initState();
+    _checkLoginStatus();
+  }
+
+  void _checkLoginStatus() async {
+    var loginValue = await SharedPrefsUtil.getString(SharedPrefsUtil.loggedin);
+
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.push(RouteNames.login);
+        if (loginValue == "loggedin") {
+          context.push(RouteNames.dashboard);
+        } else {
+          context.pushReplacement(RouteNames.login);
+        }
       }
     });
   }

@@ -1,9 +1,12 @@
+import 'package:dibasys_project/@core/configs/shared_pref.dart';
 import 'package:dibasys_project/@core/controllers/appController.dart';
 import 'package:dibasys_project/@core/controllers/dashboardController.dart';
+import 'package:dibasys_project/@core/router/routenames.dart';
 import 'package:dibasys_project/@core/theme/app_theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -49,12 +52,15 @@ class AppDrawer extends StatelessWidget {
                   ),
 
                   ...List.generate(provider.tabs.length, (index) {
-                    final isSelected = index == provider.bottomNavIndex;
+                    final isSelected = index == provider.bottomNavIndex.index;
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         onTap: () {
-                          provider.setBottomNavIndex = index;
+                          provider.setBottomNavIndex = BottomNavClass(
+                            index: index,
+                            name: provider.tabs[index]['label'],
+                          );
                           Scaffold.of(context).closeDrawer();
                         },
                         child: ListTile(
@@ -82,6 +88,40 @@ class AppDrawer extends StatelessWidget {
                       ),
                     );
                   }),
+
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        provider.setBottomNavIndex = BottomNavClass(
+                          name: "Home",
+                          index: 0,
+                        );
+                        Scaffold.of(context).closeDrawer();
+                        context.pushReplacement(RouteNames.login);
+                        SharedPrefsUtil.logOut();
+                      },
+                      child: ListTile(
+                        tileColor: Colors.transparent,
+                        leading: SvgPicture.asset(
+                          "assets/images/icons/logout.svg",
+
+                          height: 26,
+                          color: !appProvider.isDark
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                        title: Text(
+                          "Logout",
+                          style: GoogleFonts.dmSans(
+                            color: !appProvider.isDark
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

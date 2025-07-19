@@ -1,7 +1,9 @@
 import 'package:dibasys_project/@core/configs/core_theme.dart';
 import 'package:dibasys_project/@core/controllers/appController.dart';
+import 'package:dibasys_project/@core/controllers/checkin_controller.dart';
 import 'package:dibasys_project/@core/controllers/dashboardController.dart';
 import 'package:dibasys_project/@core/controllers/loginController.dart';
+import 'package:dibasys_project/@core/controllers/reg_controller.dart';
 import 'package:dibasys_project/@core/router/approuter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +36,29 @@ class MyApp extends StatelessWidget {
     return ScreenUtilSetup(
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => LoginController()),
+          ChangeNotifierProvider(
+            create: (context) => LoginController(
+              context: AppRouter
+                  .router
+                  .routerDelegate
+                  .navigatorKey
+                  .currentState!
+                  .context,
+            ),
+          ),
           ChangeNotifierProvider(create: (context) => AppProvider()),
           ChangeNotifierProvider(create: (context) => DashBoardController()),
+          ChangeNotifierProvider(create: (context) => CheckInController()),
+          ChangeNotifierProvider(
+            create: (context) => RegController(
+              context: AppRouter
+                  .router
+                  .routerDelegate
+                  .navigatorKey
+                  .currentState!
+                  .context,
+            ),
+          ),
         ],
         child: Consumer<AppProvider>(
           builder: (context, value, _) {
