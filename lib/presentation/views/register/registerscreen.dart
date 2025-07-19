@@ -35,6 +35,7 @@ class RegisterScreen extends StatelessWidget {
                   _buildTextField(
                     controller: provider.phoneNoController,
                     hint: 'Mobile',
+                    maxlength: 10,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Mobile is required'
                         : null,

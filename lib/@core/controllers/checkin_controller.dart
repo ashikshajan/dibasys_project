@@ -30,6 +30,10 @@ class CheckInController with ChangeNotifier {
   void stopTimer() {
     _timer?.cancel();
     _timer = null;
+    _elapsed = Duration.zero;
+    selectedProject = null;
+    selectedGate = null;
+    workType = null;
     notifyListeners(); // Optional: trigger UI update to reflect stopped state
   }
 
